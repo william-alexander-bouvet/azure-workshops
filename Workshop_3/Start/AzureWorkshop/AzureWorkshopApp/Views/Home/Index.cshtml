@@ -105,6 +105,10 @@
 
     <div class="box content">
         <hr>
+        <!-- TODO: Add this (just a single alfakrull)
+        @@if(User.IsInRole("Uploader"))
+        {
+        -->
         <div class="form-wrapper">
             <form action="/api/images/upload"
                   class="dropzone needsclick dz-clickable"
@@ -119,6 +123,7 @@
                 </div>
             </form>
         </div>
+        <!-- TODO: } -->
         <div id="stored-images"></div>
         <div id="errors"></div>
     </div>

@@ -17,10 +17,10 @@ I denne leksjonen skal vi:
 ​
 Start med å klone ut prosjektet med GIT.
 ​
-`git clone https://github.com/bouvet/azure-workshops.git`
+`git clone https://github.com/william-alexander-bouvet/azure-workshops.git`
 ​
 Gå så inn i `azure-workshops/Workshop_3/Start` katalogen, og her ligger prosjektet du skal jobbe videre med.
-​
+
 
 ### Deploy av infrastruktur
 
@@ -34,6 +34,11 @@ Først må vi konfigurere navn på tjenestene som brukes av applikasjonen slik a
   ​
 
   Disse variablene må ha navn som er globalt unike, så hvis du velger et navn som er i bruk vil deployment feile første gang. Ingen fare, da er det bare å endre navnene i denne fila.
+  
+  For inspirasjon til navngiving:
+​[Define your naming convention](https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ready/azure-best-practices/resource-naming)
+
+[Abbrevation recommendations](https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ready/azure-best-practices/resource-abbreviations?source=recommendations)
 
 #### _For å deploye infrastrukturen med Visual Studio_
 
@@ -98,7 +103,7 @@ Nå skal du deploye selve applikasjonen fra Visual Studio Code.
 10. Velg Deploy to Web App
 11. Velg Browse
 12. Naviger til `Start/AzureWorkshop/AzureWorkshopApp/bin/Release/`
-13. Velg net6.0/publish-mappen
+13. Velg net8.0/publish-mappen
 
 Nå skal du ha en fungerende applikasjon i Azure. Hvis du forsøker å gå til applikasjonen vil du få en feilmelding om manglende connection string. Det skal vi fikse i neste steg.
 
@@ -106,10 +111,20 @@ Nå skal du ha en fungerende applikasjon i Azure. Hvis du forsøker å gå til a
 For å sikre hemmeligheter som passord og connection strings kan man bruke Azure KeyVault. For å sørge for at disse hemmelighetene ikke er lett tilgjengelig legges disse inn i et keyvault, som man begrenser tilgangen til.
 (Denne oppgaven var bonusleksjon i WS1, hvis noen synes den ser kjent ut. Har du gjort den før kan du velge om du vil forsøke å gjøre endringene i ARM-templates i stedet for å bruke Azure CLI).
 
+Slette
+```
+{
+   "name": "AzureStorageConfig:AccountKey",
+   "value": "[listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName')), '2021-09-01').keys[0].value]"
+},
+```
+fra `azuredeploy.json` og redeploye infrastrukturen med az cli slik at accountkey-en ikke er tilgjenelig direkt på App Servicens miljøvariabler.
+
+
 ### _Azure CLI_
 **Opprett keyvault**
 ```
-az keyvault create  --name {dittKeyVault} --enable-rbac-authorization true --resource-group {dinRessursGruppe}
+az keyvault create  --name {dittKeyVault} --resource-group {dinRessursGruppe}
 ```
 **Gi deg selv rettigheter til å administrere secrets**
 For dette steget trenger du å finne to verdier. Det første er din userid, den finner du enklest ved å kjøre `az ad signed-in-user show`. 

@@ -20,5 +20,5 @@ Forutsetninger for å gjennomføre workshop:
 Disse emnene vil bli gjennomgått i denne modulen:
 
 - Leksjon 1: Introduksjon til sikkerhet i Azure.
-- Leksjon 2: Azure AD / Autentisering mot Azure AD.
+- Leksjon 2: Entra ID / Autentisering mot Entra ID.
 - Bonus-leksjon: Introduksjon til infrastruktur-sikkerhet.

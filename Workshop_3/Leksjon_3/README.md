@@ -1,6 +1,6 @@
-# Azure Security Center
+# Microsoft Defender for Cloud
 
-Nå skal du se om du får noen anbefalinger fra Security Center på App Servicen din.
+Nå skal du se om du får noen anbefalinger fra Microsoft Defender på App Servicen din.
 
 - Logg inn i Azure-portalen (https://portal.azure.com).
 - Gå til `webappnavn` som du opprettet i leksjon 1.

@@ -28,7 +28,7 @@ namespace AzureWorkshopApp
         public void ConfigureServices(IServiceCollection services)
         {
 
-            //TODO:Kommenter inn linja som legger til autentisering med Azure AD
+            //TODO:Kommenter inn linja som legger til autentisering med Entra ID
             // services.AddMicrosoftIdentityWebAppAuthentication(Configuration, "AzureAd");
 
             // TODO: Kommenter ut denne.

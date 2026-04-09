@@ -1,27 +1,27 @@
-# Leksjon 2: Azure AD
+# Leksjon 2: Entra ID
 
 ​
-I denne leksjonen skal vi lage innlogging for applikasjonen vår, slik at kun brukere som har en bruker i Azure AD (for din tenant) har tilgang til applikasjonen. Vi skal også legge på autentisering som styres i Azure AD, slik at kun brukere som har en spesiell rolle (Uploader) har lov til å laste opp bilder. Andre som logger seg inn har mulighet til å se bilder, men ikke laste opp.
+I denne leksjonen skal vi lage innlogging for applikasjonen vår, slik at kun brukere som har en bruker i Entra ID (for din tenant) har tilgang til applikasjonen. Vi skal også legge på autentisering som styres i Entra ID, slik at kun brukere som har en spesiell rolle (Uploader) har lov til å laste opp bilder. Andre som logger seg inn har mulighet til å se bilder, men ikke laste opp.
 ​
 
-## Azure AD - Autentisering
+## Entra ID - Autentisering
 
 ​
 Vi begynner med å legge på autentisering på applikasjonen.
 ​
 
-### App registrering - Klargjøre for innlogging i applikasjonen i Azure AD
+### App registrering - Klargjøre for innlogging i applikasjonen i Entra ID
 
 ​
-Først må vi klargjøre for applikasjonen vår i Azure AD ved å lage en App Registrering for applikasjonen vår.
+Først må vi klargjøre for applikasjonen vår i Entra ID ved å lage en App Registrering for applikasjonen vår.
 ​
 
-1. Logg inn i Azure-portalen (https://portal.azure.com).
-2. Velg "Azure Active Directory" i menyen til venstre.
+1. Gå inn på Entra ID(https://entra.microsoft.com).
+2. **Byt tenant til Bouvet Innlandet Kompetanseutvikling, bouvetinnvikling.onmicrosoft.com **
 3. Velg "App registrations", så trykk på "+ New registration"
 4. Gi applikasjonen din et navn, og merk dette navnet slik at du vet at dette er din applikasjon.
-5. Velg "Accounts in this organizational directory only.". Dette betyr at kun brukere som er registrert i din AD har mulighet til å logge inn her (single tenant).
-6. Velg så "Web" under "Redirect URI", og skriv inn adressen brukeren skal bli sendt videre "https://\<webappname>.azurewebsites.net/signin-oidc". Dette vil være OpenID Connect endepunktet som Azure AD vil sende deg videre etter at du har blitt autentisert.
+5. Velg "Single tenant only.". Dette betyr at kun brukere som er registrert i din Entra har mulighet til å logge inn her
+6. Velg så "Web" under "Redirect URI", og skriv inn adressen brukeren skal bli sendt videre "https://\<webappname>.azurewebsites.net/signin-oidc". Dette vil være OpenID Connect endepunktet som Entra ID vil sende deg videre etter at du har blitt autentisert.
 7. Trykk "Register".
 8. På venstre side trykker du på "Authentication". I feltet for "Front-Channel Logout URL", legg inn "https://\<webappname>.azurewebsites.net/signout-oidc".
 9. Du må også krysse av for "ID token" under authentication.
@@ -77,14 +77,14 @@ Editer filen AzureWorkshop/AzureWorkshopApp/appsettings.json legg inn konfiguras
 ​
 Nå når er det på tide å legge til funksjonaliteten til AzureWorkshop prosjektet.
 ​
-Vi har allerede lagt til Microsoft.Identity.Web og Microsoft.Identity.Web.UI NuGet-pakker, som gjør funksjonalitet for innlogging via Azure AD tilgjengelig.
+Vi har allerede lagt til Microsoft.Identity.Web og Microsoft.Identity.Web.UI NuGet-pakker, som gjør funksjonalitet for innlogging via Entra ID tilgjengelig.
 ​
 I denne workshoppen har vi valgt å legge inn kodeendringer som kommentarer som må kommenteres inn/ut for å få den funksjonaliten. Alle endringer har TODO: foran, slik at man lett kan finne dem. Alle filer som må endres:
 ​
 
 1. Startup.cs: Legg inn lasting av middleware for autentisering og cookies.
 2. Views/Shared/\_Layout.cshtml: Legg inn inkludering av et partial view som har login- og logout-grensesnitt.
-3. Controllers/HomeController.cs: Legg til Authorize-attributt som krever at man må være logget inn, og videresender til Azure AD for autentisering hvis ikke brukeren er autentisert.
+3. Controllers/HomeController.cs: Legg til Authorize-attributt som krever at man må være logget inn, og videresender til Entra ID for autentisering hvis ikke brukeren er autentisert.
 4. Controllers/ImageController.cs: Legg til Authorize-attributt på controlleren for å kreve innlogging også her (NB! Ikke utkommenter koden som krever rollen Uploader for å laste opp ennå.)
    ​
    
@@ -99,9 +99,9 @@ Autorisasjon er hva en autentisert bruker har lov til å gjøre. Nå skal vi set
 lov til å laste opp bilder, mens alle som er innlogget får se bildene.
 ​
 Vi ønsker å implementere rollebasert autorisasjon i applikasjonen, slik at kun en rolle (Uploader)
-skal ha mulighet til å laste opp bilder. Her skal vi bruke AppRoles, som er en innebygged funksjon i Azure AD.
+skal ha mulighet til å laste opp bilder. Her skal vi bruke AppRoles, som er en innebygged funksjon i Entra ID.
 ​
-Først må du legge til rollen du ønsker Azure AD skal returnere dersom brukeren som autentiserer
+Først må du legge til rollen du ønsker Entra ID skal returnere dersom brukeren som autentiserer
 seg har denne rollen. Først legger du til rollen i manifestet for applikasjonen:
 ​
 
@@ -109,7 +109,7 @@ seg har denne rollen. Først legger du til rollen i manifestet for applikasjonen
    Directory.
 2. Gå så til App Registrations, og finn applikasjonen du laget i forrige oppgave.
 3. Gå til undermenyen "Manifest", og erstatt verdien for appRoles ([])med denne:
-   `[{ "allowedMemberTypes": [ "User" ], "description": "Uploaders have access to upload images.", "displayName": "Uploader", "id": "7d957fab-2c16-48aa-b4d8-d9d3a219c19d", "isEnabled": true, "lang": null, "origin": "Application", "value": "Uploader" }]`
+   `[{ "allowedMemberTypes": [ "User" ], "description": "Uploaders have access to upload images.", "displayName": "Uploader", "id": "7d957fab-2c16-48aa-b4d8-d9d3a219c19d", "isEnabled": true, "origin": "Application", "value": "Uploader" }]`
 4. Trykk "Save" på toppen av skjermen (når du oppdaterer siden blir allowedMembersTypes penere formattert).
    ​
    Dette vil lage rollen "Uploader" og returnere dette i id-tokenet (dersom man er av denne rollen) når man autentiserer seg mot denne applikasjonen.
@@ -145,4 +145,4 @@ For å nå kunne gi brukeren din rollen Uploader.
 ## Oppsummering
 
 ​
-I denne leksjonen har du laget innlogging for applikasjonen vår, slik at kun brukere som har en bruker i Azure AD (for din tenant) har tilgang til applikasjonen. Du har også lagt på autentisering som styres i Azure AD, slik at kun brukere som har en spesiell rolle (Uploader) har lov til å laste opp bilder. Andre som logger seg inn har mulighet til å se bilder, men ikke laste opp.
+I denne leksjonen har du laget innlogging for applikasjonen vår, slik at kun brukere som har en bruker i Entra ID (for din tenant) har tilgang til applikasjonen. Du har også lagt på autentisering som styres i Entra ID, slik at kun brukere som har en spesiell rolle (Uploader) har lov til å laste opp bilder. Andre som logger seg inn har mulighet til å se bilder, men ikke laste opp.

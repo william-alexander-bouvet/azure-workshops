@@ -49,6 +49,7 @@
       "apiVersion": "2021-03-01",
       "type": "Microsoft.Web/serverfarms",
       "kind": "app",
+      "reserved": true,
       "name": "[variables('servicePlanName')]",
       "location": "[parameters('location')]",
       "comments": "This app service plan is used for the web app and slots.",
