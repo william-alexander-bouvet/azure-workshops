@@ -55,8 +55,7 @@
       "properties": {
         "reserved": true
       },
-      "dependsOn": [
-      ],
+      "dependsOn": [],
       "sku": {
         "name": "[parameters('appServiceSku')]"
       }
@@ -69,11 +68,11 @@
       "location": "[parameters('location')]",
       "comments": "This is the web app, also the default 'nameless' slot.",
       "identity": {
-        "type" : "SystemAssigned"
+        "type": "SystemAssigned"
       },
       "properties": {
         "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('servicePlanName'))]",
-        "siteConfig": {          
+        "siteConfig": {
           "appSettings": [
             {
               "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
@@ -112,6 +111,19 @@
       ]
     },
     {
+      "type": "Microsoft.Web/sites/config",
+      "apiVersion": "2024-11-01",
+      "name": "[concat(parameters('webSiteName'), '/web')]",
+      "location": "Norway East",
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/sites', parameters('webSiteName'))]"
+      ],
+      "properties": {
+        "netFrameworkVersion": "v4.0",
+        "linuxFxVersion": "DOTNETCORE|8.0"
+      }
+    },
+    {
       "name": "[parameters('storageAccountName')]",
       "type": "Microsoft.Storage/storageAccounts",
       "apiVersion": "2021-09-01",
@@ -143,8 +155,7 @@
       "type": "Microsoft.Insights/components",
       "apiVersion": "2020-02-02",
       "location": "[parameters('location')]",
-      "tags": {
-      },
+      "tags": {},
       "kind": "string",
       "properties": {
         "Application_Type": "web",
