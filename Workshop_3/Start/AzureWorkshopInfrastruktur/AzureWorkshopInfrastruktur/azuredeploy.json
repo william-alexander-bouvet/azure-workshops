@@ -22,7 +22,7 @@
     },
     "appServiceSku": {
       "type": "string",
-      "defaultValue": "F1",
+      "defaultValue": "B1",
       "metadata": {
         "description": "The SKU of the App Service Plan"
       }
@@ -49,11 +49,11 @@
       "apiVersion": "2021-03-01",
       "type": "Microsoft.Web/serverfarms",
       "kind": "app",
-      "reserved": true,
       "name": "[variables('servicePlanName')]",
       "location": "[parameters('location')]",
       "comments": "This app service plan is used for the web app and slots.",
       "properties": {
+        "reserved": true
       },
       "dependsOn": [
       ],
@@ -92,15 +92,15 @@
               "value": "1.0.0"
             },
             {
-              "name": "AzureStorageConfig:AccountName",
+              "name": "AzureStorageConfig__AccountName",
               "value": "[parameters('storageAccountName')]"
             },
             {
-              "name": "AzureStorageConfig:AccountKey",
+              "name": "AzureStorageConfig__AccountKey",
               "value": "[listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName')), '2021-09-01').keys[0].value]"
             },
             {
-              "name": "AzureStorageConfig:ImageContainer",
+              "name": "AzureStorageConfig__ImageContainer",
               "value": "[parameters('blobContainerName')]"
             }
           ]

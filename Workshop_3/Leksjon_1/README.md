@@ -36,6 +36,7 @@ Først må vi konfigurere navn på tjenestene som brukes av applikasjonen slik a
   Disse variablene må ha navn som er globalt unike, så hvis du velger et navn som er i bruk vil deployment feile første gang. Ingen fare, da er det bare å endre navnene i denne fila.
   
   For inspirasjon til navngiving:
+
 ​[Define your naming convention](https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ready/azure-best-practices/resource-naming)
 
 [Abbrevation recommendations](https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ready/azure-best-practices/resource-abbreviations?source=recommendations)
@@ -57,7 +58,7 @@ Først må vi konfigurere navn på tjenestene som brukes av applikasjonen slik a
 3. Logg inn ved å kjøre `az login`
 4. Bytt subscription hvis du trenger det med kommandoen `az account set --subscription "{subscription name or id}"`
 5. Opprett en ressursgruppe ved å kjøre kommandoen ```az group create --name {dinRessursgruppe} --location {dinLocation}``` Gi ressursgruppen et selvvalgt navn. For location kan du f.eks. bruke `westeurope`  eller `norwayeast`.
-6. Kjør kommandoen 
+6. Kjør kommandoen (dette er syntax for Windows) 
    ```powershell
    az deployment group create `
    --resource-group {dinRessursGruppe} `

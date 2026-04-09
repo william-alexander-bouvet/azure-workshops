@@ -1,5 +1,5 @@
 {
-  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
     "webSiteName": {
@@ -22,7 +22,7 @@
     },
     "appServiceSku": {
       "type": "string",
-      "defaultValue": "F1",
+      "defaultValue": "B1",
       "metadata": {
         "description": "The SKU of the App Service Plan"
       }
@@ -30,9 +30,9 @@
     "appInsightsName": {
       "type": "string",
       "metadata": {
-        "description": "The name of the Application Insights instance" 
-      } 
-    }, 
+        "description": "The name of the Application Insights instance"
+      }
+    },
     "location": {
       "type": "string",
       "defaultValue": "[resourceGroup().location]",
@@ -42,38 +42,42 @@
     }
   },
   "variables": {
-    "servicePlanName": "AppServicePlan" 
+    "servicePlanName": "AppServicePlan"
   },
   "resources": [
     {
-      "apiVersion": "2017-08-01",
+      "apiVersion": "2021-03-01",
       "type": "Microsoft.Web/serverfarms",
       "kind": "app",
-      "reserved": true,
       "name": "[variables('servicePlanName')]",
       "location": "[parameters('location')]",
       "comments": "This app service plan is used for the web app and slots.",
-      "properties": {},
-      "dependsOn": [],
+      "properties": {
+        "reserved": true
+      },
+      "dependsOn": [
+      ],
       "sku": {
         "name": "[parameters('appServiceSku')]"
       }
     },
     {
-      "apiVersion": "2016-08-01",
+      "apiVersion": "2021-03-01",
       "type": "Microsoft.Web/sites",
       "kind": "app",
       "name": "[parameters('webSiteName')]",
       "location": "[parameters('location')]",
       "comments": "This is the web app, also the default 'nameless' slot.",
+      "identity": {
+        "type" : "SystemAssigned"
+      },
       "properties": {
-        "httpsOnly": true,
         "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('servicePlanName'))]",
-        "siteConfig": {
+        "siteConfig": {          
           "appSettings": [
             {
               "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
-              "value": "[reference(resourceId('Microsoft.Insights/components', parameters('appInsightsName')), '2014-04-01').InstrumentationKey]"
+              "value": "[reference(resourceId('Microsoft.Insights/components', parameters('appInsightsName')), '2020-02-02').InstrumentationKey]"
             },
             {
               "name": "APPINSIGHTS_PORTALINFO",
@@ -88,40 +92,16 @@
               "value": "1.0.0"
             },
             {
-              "name": "AzureStorageConfig:AccountName",
+              "name": "AzureStorageConfig__AccountName",
               "value": "[parameters('storageAccountName')]"
             },
             {
-              "name": "AzureStorageConfig:AccountKey",
-              "value": "[listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName')), providers('Microsoft.Storage', 'storageAccounts').apiVersions[0]).keys[0].value]"
+              "name": "AzureStorageConfig__AccountKey",
+              "value": "[listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName')), '2021-09-01').keys[0].value]"
             },
             {
-              "name": "AzureStorageConfig:ImageContainer",
+              "name": "AzureStorageConfig__ImageContainer",
               "value": "[parameters('blobContainerName')]"
-            },
-            {
-              "name": "AzureAd:Instance",
-              "value": "https://login.microsoftonline.com/"
-            },
-            {
-              "name": "AzureAd:Instance",
-              "value": "https://login.microsoftonline.com/"
-            },
-            {
-              "name": "AzureAd:TenantId",
-              "value": "<Directory (tenant) ID>"
-            },
-            {
-              "name": "AzureAd:ClientId",
-              "value": "<Application (client) ID>"
-            },
-            {
-              "name": "AzureAd:CallbackPath",
-              "value": "https://<webappnavn>.azurewebsites.net/signin-oidc"
-            },
-            {
-              "name": "AzureAd:SignedOutCallbackPath",
-              "value": "https://<webappnavn>.azurewebsites.net/signout-oidc"
             }
           ]
         }
@@ -134,7 +114,7 @@
     {
       "name": "[parameters('storageAccountName')]",
       "type": "Microsoft.Storage/storageAccounts",
-      "apiVersion": "2018-02-01",
+      "apiVersion": "2021-09-01",
       "location": "[parameters('location')]",
       "kind": "StorageV2",
       "sku": {
@@ -142,16 +122,15 @@
         "tier": "Standard"
       },
       "properties": {
-        "supportsHttpsTrafficOnly": true,
         "accessTier": "Hot"
       },
       "resources": [
         {
           "name": "[concat('default/', parameters('blobContainerName'))]",
           "type": "blobServices/containers",
-          "apiVersion": "2018-03-01-preview",
+          "apiVersion": "2021-09-01",
           "properties": {
-            "publicAccess": "Container"
+            "publicAccess": "None"
           },
           "dependsOn": [
             "[parameters('storageAccountName')]"
@@ -162,9 +141,10 @@
     {
       "name": "[parameters('appInsightsName')]",
       "type": "Microsoft.Insights/components",
-      "apiVersion": "2015-05-01",
+      "apiVersion": "2020-02-02",
       "location": "[parameters('location')]",
-      "tags": {},
+      "tags": {
+      },
       "kind": "string",
       "properties": {
         "Application_Type": "web",
