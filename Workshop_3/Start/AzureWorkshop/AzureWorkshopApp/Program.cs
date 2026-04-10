@@ -1,4 +1,8 @@
-﻿using Microsoft.AspNetCore;
+﻿// TODO: Uncomment usings:
+// using System;
+// using Azure.Identity;
+// using Microsoft.Extensions.Configuration;
+using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 
 namespace AzureWorkshopApp
