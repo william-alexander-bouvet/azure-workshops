@@ -112,13 +112,18 @@ Nå skal du ha en fungerende applikasjon i Azure. Hvis du forsøker å gå til a
 For å sikre hemmeligheter som passord og connection strings kan man bruke Azure KeyVault. For å sørge for at disse hemmelighetene ikke er lett tilgjengelig legges disse inn i et keyvault, som man begrenser tilgangen til.
 (Denne oppgaven var bonusleksjon i WS1, hvis noen synes den ser kjent ut. Har du gjort den før kan du velge om du vil forsøke å gjøre endringene i ARM-templates i stedet for å bruke Azure CLI).
 
-Slette
+Slett
 ```
 {
-   "name": "AzureStorageConfig:AccountKey",
+   "name": "AzureStorageConfig__AccountName",
+   "value": "[parameters('storageAccountName')]"
+},
+{
+   "name": "AzureStorageConfig__AccountKey",
    "value": "[listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName')), '2021-09-01').keys[0].value]"
 },
 ```
+
 fra `azuredeploy.json` og redeploye infrastrukturen med az cli slik at accountkey-en ikke er tilgjenelig direkt på App Servicens miljøvariabler.
 
 
@@ -153,7 +158,7 @@ az role assignment create --role "Key Vault Secrets User" --assignee {principalI
 
 **Oppdater applikasjonen**
 Oppdater webapplikasjonen til å bruke KeyVault for config-settings.
-Legg til nuget-pakkene `Azure.Identity` og `Azure.Extensions.AspNetCore.Configuration.Secrets`.
+Legg til nuget-pakkene `Azure.Identity` og `Azure.Extensions.AspNetCore.Configuration.Secrets`.  (`dotnet add package ...`)
 
 Endre Program.cs: 
 ```cs

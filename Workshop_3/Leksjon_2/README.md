@@ -16,16 +16,16 @@ Vi begynner med å legge på autentisering på applikasjonen.
 Først må vi klargjøre for applikasjonen vår i Entra ID ved å lage en App Registrering for applikasjonen vår.
 ​
 
-1. Gå inn på Entra ID(https://entra.microsoft.com).
+1. Gå inn på Entra ID (https://entra.microsoft.com).
 2. **Byt tenant til Bouvet Innlandet Kompetanseutvikling, bouvetinnvikling.onmicrosoft.com **
-3. Velg "App registrations", så trykk på "+ New registration"
+3. Velg "Entra ID -> App registrations", så trykk på "+ New registration"
 4. Gi applikasjonen din et navn, og merk dette navnet slik at du vet at dette er din applikasjon.
 5. Velg "Single tenant only.". Dette betyr at kun brukere som er registrert i din Entra har mulighet til å logge inn her
 6. Velg så "Web" under "Redirect URI", og skriv inn adressen brukeren skal bli sendt videre "https://\<webappname>.azurewebsites.net/signin-oidc". Dette vil være OpenID Connect endepunktet som Entra ID vil sende deg videre etter at du har blitt autentisert.
 7. Trykk "Register".
-8. På venstre side trykker du på "Authentication". I feltet for "Front-Channel Logout URL", legg inn "https://\<webappname>.azurewebsites.net/signout-oidc".
+8. På venstre side trykker du på "Authentication". I feltet for "Front-Channel Logout URL" under "Settings", legg inn "https://\<webappname>.azurewebsites.net/signout-oidc".
 9. Du må også krysse av for "ID token" under authentication.
-10. Trykk "Save" på toppen av skjermen.
+10. Trykk "Save".
 11. Ta vare på "Application (client) ID" og "Directory (tenant) ID" som står på oversiktssiden "Overview". Du trenger denne senere.
     (Dersom du ønsker å debugge lokalt, må du også legge inn "https://localhost:44327/signin-oidc" som "Redirect URI "og "https://localhost:44327/signout-oidc" som "Logout URL".
     Ideelt bør man opprette en egen App Registration for lokal debugging, men for dette test-formålet, og for å spare tid gjør vi ikke det her)
@@ -41,23 +41,23 @@ Fyll også inn verdiene for TenantID og ClientID som du fikk tak i forrige oppga
 
 ```json
             {
-              "name": "AzureAd:Instance",
+              "name": "AzureAd__Instance",
               "value": "https://login.microsoftonline.com/"
             },
             {
-              "name": "AzureAd:TenantId",
+              "name": "AzureAd__TenantId",
               "value": "<Directory (tenant) ID>"
             },
             {
-              "name": "AzureAd:ClientId",
+              "name": "AzureAd__ClientId",
               "value": "<Application (client) ID>"
             },
             {
-              "name": "AzureAd:CallbackPath",
+              "name": "AzureAd__CallbackPath",
               "value": "/signin-oidc"
             },
             {
-              "name": "AzureAd:SignedOutCallbackPath",
+              "name": "AzureAd__SignedOutCallbackPath",
               "value": "/signout-oidc"
             }
 ​
