@@ -105,12 +105,17 @@ Først må du legge til rollen du ønsker Entra ID skal returnere dersom brukere
 seg har denne rollen. Først legger du til rollen i manifestet for applikasjonen:
 ​
 
-1. Gå til Azure-portalen (https://portal.azure.com) og gå så til menyen for Active
+1. Gå til Entra ID igen (https://entra.microsoft.com) og gå så til menyen for Active
    Directory.
 2. Gå så til App Registrations, og finn applikasjonen du laget i forrige oppgave.
-3. Gå til undermenyen "Manifest", og erstatt verdien for appRoles ([])med denne:
-   `[{ "allowedMemberTypes": [ "User" ], "description": "Uploaders have access to upload images.", "displayName": "Uploader", "id": "7d957fab-2c16-48aa-b4d8-d9d3a219c19d", "isEnabled": true, "origin": "Application", "value": "Uploader" }]`
-4. Trykk "Save" på toppen av skjermen (når du oppdaterer siden blir allowedMembersTypes penere formattert).
+
+## \<svenska>
+
+3. Gå till App roles, klicka `+ Create app role`, välj display name `Uploaders`, ta Users/Groups som allowed types, ta `Uploaders` som Value också,
+och välj en description att man har lov att ladda upp bilder.
+4. Klicka på Apply
+
+## \</svenska>
    ​
    Dette vil lage rollen "Uploader" og returnere dette i id-tokenet (dersom man er av denne rollen) når man autentiserer seg mot denne applikasjonen.
    ​
@@ -130,16 +135,20 @@ Nå ønsker du gjøre slik at det kun er brukere som har rollen Uploader mulighe
 ### Tillegg rolle til bruker
 
 ​
-For å nå kunne gi brukeren din rollen Uploader.
 ​
 
-1. Gå til _Azure Active Directory_ ressursen i Azure portalen, trykk til `Enterprise Applications`.
-2. Finn applikasjonen du lagde (bruk søkefeltet) og trykk på denne.
-3. Gå til `Users & Groups`. Trykk på `+ Add user`
-4. Legg til deg selv, og se at rollen er `Uploader` (det er eneste rollen vi har).
-5. Trykk `Assign`
+## \<svenska>
+Nu ska du ge dig själv rollen `Uploader`.
+Gå in i Entra ID igen, och finn `Enterprise Apps`.
+1. Gå till enterprise-applikationen med samma namn som din Application Registration.
+2. Gå till Users and groups
+3. Ta `+ Add User/group`
+4. Välj dig själv och låt det enda valet, `Uploader`, så som vald roll.
+5. Ta assign.
+
+## \</svenska>
    ​
-   Du må logge ut og inn igjen for at du skal motta id-tokenet ditt med den nye rollen. Prøv dette og se at du nå har mulighet til å laste opp bilder.
+Du må logge ut og inn igjen for at du skal motta id-tokenet ditt med den nye rollen. Prøv dette og se at du nå har mulighet til å laste opp bilder.
    ​
 
 ## Oppsummering
