@@ -138,6 +138,7 @@ Nå ønsker du gjøre slik at det kun er brukere som har rollen Uploader mulighe
 ​
 
 ## \<svenska>
+
 Nu ska du ge dig själv rollen `Uploader`.
 Gå in i Entra ID igen, och finn `Enterprise Apps`.
 1. Gå till enterprise-applikationen med samma namn som din Application Registration.
