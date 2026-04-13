@@ -72,6 +72,7 @@ Først må vi konfigurere navn på tjenestene som brukes av applikasjonen slik a
 
 ### Deploy av applikasjon
 
+
 #### _For brukere med Visual Studio​_
 
 Nå skal du deploye selve applikasjonen fra Visual Studio. Åpne `AzureWorkshop/AzureWorkshop.sln` i Visual Studio (du kan gjerne ha infrastruktur-prosjektet opp).
@@ -107,6 +108,14 @@ Nå skal du deploye selve applikasjonen fra Visual Studio Code.
 13. Velg net8.0/publish-mappen
 
 Nå skal du ha en fungerende applikasjon i Azure. Hvis du forsøker å gå til applikasjonen vil du få en feilmelding om manglende connection string. Det skal vi fikse i neste steg.
+
+#### _For brukere med az cli
+Se til at obj og bin ikke eksisterer
+1. npm install i azure-workshops/Workshop_3/Start/AzureWorkshop/AzureWorkshopApp
+2. az webapp config appsettings set --resource-group <resource group> --name <webapp-name> --settings SCM_DO_BUILD_DURING_DEPLOYMENT=true
+3. zip -r app.zip azure-workshops/Workshop_3/Start/AzureWorkshop/AzureWorkshopApp
+4. az webapp deploy --resource-group <resource-group> --name <webapp-name> --src-path ./app.zip --type zip
+
 
 ## Sikring av hemmeligheter
 For å sikre hemmeligheter som passord og connection strings kan man bruke Azure KeyVault. For å sørge for at disse hemmelighetene ikke er lett tilgjengelig legges disse inn i et keyvault, som man begrenser tilgangen til.
